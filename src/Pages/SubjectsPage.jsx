@@ -462,6 +462,19 @@ const SubjectsPage = () => {
     }
   };
 
+  const isDisabled = () => {
+    if (!selectedFormat || !selectedOutputFormat) return true;
+
+    const formatId = parseInt(selectedFormat);
+    const contentSelections = {
+      1: selectedLectures, // Lectures
+      2: selectedCaseStudies, // Case Studies
+      3: selectedAssignments, // Assignments
+    };
+
+    return !contentSelections[formatId];
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header */}
@@ -708,21 +721,12 @@ const SubjectsPage = () => {
                 fullWidth
                 size="large"
                 onClick={handleEnrollClick}
-                disabled={
-                  !selectedFormat &&
-                  !selectedOutputFormat &&
-                  !(
-                    selectedLectures ||
-                    selectedCaseStudies ||
-                    selectedAssignments
-                  )
-                }
+                disabled={isDisabled()}
                 sx={{
                   py: 1.5,
-                  background:
-                    selectedFormat && selectedOutputFormat
-                      ? "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)"
-                      : "grey",
+                  background: !isDisabled()
+                    ? "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)"
+                    : "grey",
                   textTransform: "none",
                   fontWeight: "bold",
                   fontSize: "1.1rem",
