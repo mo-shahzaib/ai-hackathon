@@ -507,7 +507,7 @@ const SubjectsPage = () => {
         {subjects.map((subject) => (
           <Grid item xs={12} sm={6} md={4} key={subject.id}>
             <StyledCard
-              onClick={() => handleSubjectClick(subject)}
+              onClick={() => subject.ready && handleSubjectClick(subject)}
               sx={{
                 opacity: subject.ready ? 1 : 0.5,
                 cursor: subject.ready ? "pointer" : "not-allowed",
