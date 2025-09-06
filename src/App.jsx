@@ -11,7 +11,7 @@ function App() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Navigation Bar */}
-      <AppBar position="static" sx={{ mb: 0 }}>
+      <AppBar position="static" sx={{ mb: 0 }} elevation={0}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             AI Content Hub
@@ -22,9 +22,9 @@ function App() {
           <Button color="inherit" component={Link} to="/demo">
             Demo
           </Button>
-          <Button color="inherit" component={Link} to="/content-repurposing">
+          {/* <Button color="inherit" component={Link} to="/content-repurposing">
             AI Repurposing
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
 

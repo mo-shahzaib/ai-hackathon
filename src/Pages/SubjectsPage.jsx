@@ -29,6 +29,13 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import {
+  formats,
+  lectures,
+  caseStudies,
+  assignments,
+  outputFormats,
+} from "../constants";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   width: "350px",
@@ -415,38 +422,11 @@ const SubjectsPage = () => {
     if (selectedFormat && selectedOutputFormat) {
       // Navigate to content repurposing page with subject info
       navigate(
-        `/content-repurposing?subject=${selectedSubject?.name}&format=${selectedFormat}&outputFormat=${selectedOutputFormat}`
+        `/content-repurposing?subject=${selectedSubject?.name}&format=${selectedFormat}&outputFormat=${selectedOutputFormat}&lectures=${selectedLectures}&caseStudies=${selectedCaseStudies}&assignments=${selectedAssignments}`
       );
       handleModalClose();
     }
   };
-
-  const formats = [
-    { id: 1, name: "Lectures" },
-    { id: 2, name: "Case Studies" },
-    { id: 3, name: "Assignments" },
-  ];
-  const lectures = [
-    { id: 1, name: "Lecture 1" },
-    { id: 2, name: "Lecture 2" },
-    { id: 3, name: "Lecture 3" },
-  ];
-  const caseStudies = [
-    { id: 1, name: "Case Study 1" },
-    { id: 2, name: "Case Study 2" },
-    { id: 3, name: "Case Study 3" },
-  ];
-  const assignments = [
-    { id: 1, name: "Assignment 1" },
-    { id: 2, name: "Assignment 2" },
-    { id: 3, name: "Assignment 3" },
-  ];
-  const outputFormats = [
-    { id: 1, name: "Short-form" },
-    { id: 2, name: "Regional Languages" },
-    { id: 3, name: "Interactive Quiz" },
-    { id: 4, name: "Flashcards" },
-  ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
