@@ -31,6 +31,7 @@ import { styled } from "@mui/material/styles";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 const StyledCard = styled(Card)(({ theme }) => ({
+  width: "350px",
   height: "100%",
   display: "flex",
   flexDirection: "column",
@@ -61,8 +62,11 @@ const SubjectsPage = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedSemester, setSelectedSemester] = useState("");
   const [selectedFormat, setSelectedFormat] = useState("");
+  const [selectedOutputFormat, setSelectedOutputFormat] = useState("");
+  const [selectedLectures, setSelectedLectures] = useState("");
+  const [selectedCaseStudies, setSelectedCaseStudies] = useState("");
+  const [selectedAssignments, setSelectedAssignments] = useState("");
 
   // Hardcoded subjects data organized by program type
   const subjectsByProgram = {
@@ -402,47 +406,59 @@ const SubjectsPage = () => {
   const handleModalClose = () => {
     setModalOpen(false);
     setSelectedSubject(null);
-    setSelectedSemester("");
+    setSelectedFormat("");
+    setSelectedOutputFormat("");
     setSelectedFormat("");
   };
 
   const handleEnrollClick = () => {
-    if (selectedSemester && selectedFormat) {
+    if (selectedFormat && selectedOutputFormat) {
       // Navigate to content repurposing page with subject info
       navigate(
-        `/content-repurposing?subject=${selectedSubject?.name}&semester=${selectedSemester}&format=${selectedFormat}`
+        `/content-repurposing?subject=${selectedSubject?.name}&format=${selectedFormat}&outputFormat=${selectedOutputFormat}`
       );
       handleModalClose();
     }
   };
 
-  const semesters = [
-    "Semester 1",
-    "Semester 2",
-    "Semester 3",
-    "Semester 4",
-    "Semester 5",
-    "Semester 6",
-  ];
   const formats = [
-    "Online Live Classes",
-    "Recorded Videos",
-    "Self-Paced Learning",
-    "Hybrid Mode",
+    { id: 1, name: "Lectures" },
+    { id: 2, name: "Case Studies" },
+    { id: 3, name: "Assignments" },
+  ];
+  const lectures = [
+    { id: 1, name: "Lecture 1" },
+    { id: 2, name: "Lecture 2" },
+    { id: 3, name: "Lecture 3" },
+  ];
+  const caseStudies = [
+    { id: 1, name: "Case Study 1" },
+    { id: 2, name: "Case Study 2" },
+    { id: 3, name: "Case Study 3" },
+  ];
+  const assignments = [
+    { id: 1, name: "Assignment 1" },
+    { id: 2, name: "Assignment 2" },
+    { id: 3, name: "Assignment 3" },
+  ];
+  const outputFormats = [
+    { id: 1, name: "Short-form" },
+    { id: 2, name: "Regional Languages" },
+    { id: 3, name: "Interactive Quiz" },
+    { id: 4, name: "Flashcards" },
   ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header */}
+      <Button
+        variant="outlined"
+        onClick={() => navigate("/")}
+        sx={{ mb: 2, alignSelf: "flex-start" }}
+      >
+        ← Back to Programs
+      </Button>
       <Box textAlign="center" mb={4}>
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/")}
-          sx={{ mb: 2, alignSelf: "flex-start" }}
-        >
-          ← Back to Programs
-        </Button>
-
         <Typography
           variant="h3"
           component="h1"
@@ -508,22 +524,22 @@ const SubjectsPage = () => {
 
                 <Box
                   display="flex"
-                  justifyContent="space-between"
+                  justifyContent="flex-end"
                   alignItems="center"
                   mt={2}
                 >
-                  <Chip
+                  {/* <Chip
                     label={`${subject.credits} Credits`}
                     size="small"
                     variant="outlined"
                     color="primary"
-                  />
+                  /> */}
                   <Typography
                     variant="body2"
                     color="primary"
                     sx={{ fontWeight: "medium" }}
                   >
-                    Click to Enroll →
+                    Click to Transform Content →
                   </Typography>
                 </Box>
               </CardContent>
@@ -557,7 +573,7 @@ const SubjectsPage = () => {
             mb={3}
           >
             <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-              Enroll in Subject
+              Generate
             </Typography>
             <IconButton onClick={handleModalClose} size="small">
               <Close />
@@ -582,33 +598,88 @@ const SubjectsPage = () => {
 
               <Divider sx={{ mb: 3 }} />
 
-              {/* Semester Dropdown */}
+              {/* Format Dropdown */}
               <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel>Select Semester</InputLabel>
+                <InputLabel>Select Content Format</InputLabel>
                 <Select
-                  value={selectedSemester}
-                  onChange={(e) => setSelectedSemester(e.target.value)}
-                  label="Select Semester"
+                  value={selectedFormat}
+                  onChange={(e) => setSelectedFormat(e.target.value)}
+                  label="Select Content Format"
                 >
-                  {semesters.map((semester) => (
-                    <MenuItem key={semester} value={semester}>
-                      {semester}
+                  {formats.map((format) => (
+                    <MenuItem key={format.id} value={format.id}>
+                      {format.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
 
-              {/* Format Dropdown */}
+              {/* Lectures Dropdown */}
+              {selectedFormat === 1 && (
+                <FormControl fullWidth sx={{ mb: 4 }}>
+                  <InputLabel>Select Lectures</InputLabel>
+                  <Select
+                    value={selectedLectures}
+                    onChange={(e) => setSelectedLectures(e.target.value)}
+                    label="Select Lectures"
+                  >
+                    {lectures.map((lecture) => (
+                      <MenuItem key={lecture.id} value={lecture.id}>
+                        {lecture.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+              {/* Case Studies Dropdown */}
+              {selectedFormat === 2 && (
+                <FormControl fullWidth sx={{ mb: 4 }}>
+                  <InputLabel>Select Case Studies</InputLabel>
+                  <Select
+                    value={selectedCaseStudies}
+                    onChange={(e) => setSelectedCaseStudies(e.target.value)}
+                    label="Select Case Studies"
+                  >
+                    {caseStudies.map((caseStudy) => (
+                      <MenuItem key={caseStudy.id} value={caseStudy.id}>
+                        {caseStudy.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+              {/* Assignments Dropdown */}
+
+              {selectedFormat === 3 && (
+                <FormControl fullWidth sx={{ mb: 4 }}>
+                  <InputLabel>Select Assignments</InputLabel>
+                  <Select
+                    value={selectedAssignments}
+                    onChange={(e) => setSelectedAssignments(e.target.value)}
+                    label="Select Assignments"
+                  >
+                    {assignments.map((assignment) => (
+                      <MenuItem key={assignment.id} value={assignment.id}>
+                        {assignment.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+              {/* Output Format Dropdown */}
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel>Learning Format</InputLabel>
+                <InputLabel>Output Format</InputLabel>
                 <Select
-                  value={selectedFormat}
-                  onChange={(e) => setSelectedFormat(e.target.value)}
-                  label="Learning Format"
+                  value={selectedOutputFormat}
+                  onChange={(e) => setSelectedOutputFormat(e.target.value)}
+                  label="Output Format"
                 >
-                  {formats.map((format) => (
-                    <MenuItem key={format} value={format}>
-                      {format}
+                  {outputFormats.map((format) => (
+                    <MenuItem key={format.id} value={format.id}>
+                      {format.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -620,17 +691,27 @@ const SubjectsPage = () => {
                 fullWidth
                 size="large"
                 onClick={handleEnrollClick}
-                disabled={!selectedSemester || !selectedFormat}
+                disabled={
+                  !selectedFormat &&
+                  !selectedOutputFormat &&
+                  !(
+                    selectedLectures ||
+                    selectedCaseStudies ||
+                    selectedAssignments
+                  )
+                }
                 sx={{
                   py: 1.5,
                   background:
-                    "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
+                    selectedFormat && selectedOutputFormat
+                      ? "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)"
+                      : "grey",
                   textTransform: "none",
                   fontWeight: "bold",
                   fontSize: "1.1rem",
                 }}
               >
-                Start Learning Journey
+                Start Genrating
               </Button>
 
               <Typography
