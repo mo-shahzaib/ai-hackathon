@@ -246,7 +246,11 @@ const Flashcards = () => {
               }}
             >
               {languageOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem
+                  key={option.value}
+                  value={option.value}
+                  disabled={!["en", "hi"].includes(option.value)}
+                >
                   {option.label}
                 </MenuItem>
               ))}

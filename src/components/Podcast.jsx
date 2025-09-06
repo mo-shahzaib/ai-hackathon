@@ -256,25 +256,39 @@ const Podcast = ({ onLoadingComplete }) => {
 
   useEffect(() => {
     if (lectures || caseStudies || assignments) {
-      getPodcast(lectures || caseStudies || assignments).then((res) => {
-        setPodcast({
-          //   audioUrl: res.data.podcast_en,
-          audioUrl: res.data.podcast_en?.includes("wav")
-            ? res.data.podcast_en
-            : "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
-          title: res.data.title || "Podcast",
-          description:
-            res.data.description ||
-            "A brief description of a topic covered in the podcast",
-          duration: res.data.duration || 300,
-          aiModel: res.data.aiModel || "Groq",
-          category: res.data.category || "Education",
-          narrator: res.data.narrator || "AI Voice",
-          fileSize: res.data.fileSize || "15.2 MB",
-          chapters: res.data.chapters || [],
-          //   chapters: res.data.chapters,
+      getPodcast(lectures || caseStudies || assignments)
+        .then((res) => {
+          setPodcast({
+            //   audioUrl: res.data.podcast_en,
+            audioUrl: res.data.podcast_en?.includes("wav")
+              ? res.data.podcast_en
+              : "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+            title: res.data.title || "Podcast",
+            description:
+              res.data.description ||
+              "A brief description of a topic covered in the podcast",
+            duration: res.data.duration || 300,
+            aiModel: res.data.aiModel || "Groq",
+            category: res.data.category || "Education",
+            narrator: res.data.narrator || "AI Voice",
+            fileSize: res.data.fileSize || "15.2 MB",
+          });
+        })
+        .catch(() => {
+          setPodcast({
+            //   audioUrl: res.data.podcast_en,
+            audioUrl:
+              "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+            title: "Podcast",
+            description:
+              "A brief description of a topic covered in the podcast",
+            duration: 300,
+            aiModel: "Groq",
+            category: "Education",
+            narrator: "AI Voice",
+            fileSize: "15.2 MB",
+          });
         });
-      });
     }
   }, [lectures, caseStudies, assignments]);
 

@@ -19,12 +19,12 @@ function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             AI Content Hub
           </Typography>
-          <Button color="inherit" component={Link} to="/">
+          <Button color="inherit" component={Link} to="/home">
             Programs
           </Button>
-          <Button color="inherit" component={Link} to="/demo">
+          {/* <Button color="inherit" component={Link} to="/demo">
             Demo
-          </Button>
+          </Button> */}
           {/* <Button color="inherit" component={Link} to="/short-form">
             AI Summary
           </Button>
