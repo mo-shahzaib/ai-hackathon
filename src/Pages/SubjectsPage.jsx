@@ -479,7 +479,8 @@ const SubjectsPage = () => {
           gutterBottom
           sx={{
             fontWeight: "bold",
-            background: "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
+            // background: "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
+            background: "linear-gradient(45deg, #667eea 30%, #764ba2 90%)",
             backgroundClip: "text",
             textFillColor: "transparent",
             WebkitBackgroundClip: "text",

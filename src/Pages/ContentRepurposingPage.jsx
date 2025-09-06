@@ -55,7 +55,7 @@ const ContentRepurposingPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header */}
-      <Box textAlign="center" mb={6}>
+      {/* <Box textAlign="center" mb={6}>
         <Typography
           variant="h3"
           component="h2"
@@ -80,7 +80,7 @@ const ContentRepurposingPage = () => {
           Transform your educational content into multiple formats and languages
           automatically
         </Typography>
-      </Box>
+      </Box> */}
 
       <Grid container spacing={4}>
         {renderContent()}
