@@ -36,13 +36,13 @@ import {
   Headphones,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-import useAudio from "../hooks/useAudio";
+import { getPodcast } from "../services/aiService";
+import { useSearchParams } from "react-router";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
   backdropFilter: "blur(10px)",
   border: `1px solid ${theme.palette.primary.main}20`,
-  //   borderRadius: theme.spacing(3),
   borderRadius: "0px 0px 12px 12px",
   position: "relative",
   overflow: "visible",
@@ -53,9 +53,7 @@ const GradientCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     height: "4px",
-
     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    // borderRadius: "12px 12px 0 0",
   },
 }));
 
@@ -124,11 +122,9 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
   },
 }));
 
-const Podcast = ({ podcastData, onLoadingComplete }) => {
-  //   const  playing, toggle } = useAudio(
-  //     "https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg"
-  //   );
-  // Default podcast data
+const Podcast = ({ onLoadingComplete }) => {
+  const [searchParams] = useSearchParams();
+  const lectures = searchParams.get("lectures");
   const defaultPodcastData = {
     title: "Business Communication Fundamentals - AI Generated Podcast",
     description:
@@ -152,7 +148,8 @@ const Podcast = ({ podcastData, onLoadingComplete }) => {
     ],
   };
 
-  const podcast = podcastData || defaultPodcastData;
+  //   const podcast = podcastData || defaultPodcastData;
+  const [podcast, setPodcast] = useState(defaultPodcastData);
 
   // Audio player state
   const audioRef = useRef(null);
@@ -199,7 +196,8 @@ const Podcast = ({ podcastData, onLoadingComplete }) => {
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
-    if (!audio || error) return;
+    console.log(audio, error);
+    if (!audio) return;
 
     if (isPlaying) {
       audio.pause();
@@ -253,6 +251,23 @@ const Podcast = ({ podcastData, onLoadingComplete }) => {
   //   };
 
   //   const currentChapter = getCurrentChapter();
+
+  useEffect(() => {
+    if (lectures) {
+      getPodcast(lectures).then((res) => {
+        setPodcast({
+          //   audioUrl: res.data.podcast_en,
+          audioUrl:
+            res.data.podcast_en ||
+            "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+          title: res.data.title || "Test",
+          description: res.data.description || "Test",
+          duration: res.data.duration || 1245,
+          //   chapters: res.data.chapters,
+        });
+      });
+    }
+  }, [lectures]);
 
   return (
     <Box sx={{ width: "100%" }}>

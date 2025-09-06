@@ -277,3 +277,8 @@ export const getSummary = async (id) => {
   const response = await axiosInstance.get(`/summary/${id}`);
   return response;
 };
+
+export const getPodcast = async (id) => {
+  const response = await axiosInstance.get(`/podcast/${id}`);
+  return response;
+};
