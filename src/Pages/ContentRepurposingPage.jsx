@@ -21,24 +21,36 @@ import {
   Refresh,
 } from "@mui/icons-material";
 import { useSearchParams } from "react-router-dom";
+import ShortForm from "../components/ShortForm";
+import RegionalLanguages from "../components/RegionalLanguages";
+import InteractiveQuiz from "../components/InteractiveQuiz";
+import Flashcards from "../components/Flashcards";
+import Podcast from "../components/Podcast";
 
 const ContentRepurposingPage = () => {
   const [searchParams] = useSearchParams();
-  const subject = searchParams.get("subject");
-  const format = searchParams.get("format");
+  //   const subject = searchParams.get("subject");
+  //   const format = searchParams.get("format");
   const outputFormat = searchParams.get("outputFormat");
-  const lectures = searchParams.get("lectures");
-  const caseStudies = searchParams.get("caseStudies");
-  const assignments = searchParams.get("assignments");
+  //   const lectures = searchParams.get("lectures");
+  //   const caseStudies = searchParams.get("caseStudies");
+  //   const assignments = searchParams.get("assignments");
 
-  console.log({
-    subject,
-    format,
-    outputFormat,
-    lectures,
-    caseStudies,
-    assignments,
-  });
+  const renderContent = () => {
+    if (outputFormat == 1) {
+      return <ShortForm />;
+    } else if (outputFormat == 2) {
+      return <RegionalLanguages />;
+    } else if (outputFormat == 3) {
+      return <InteractiveQuiz />;
+    } else if (outputFormat == 4) {
+      return <Flashcards />;
+    } else if (outputFormat == 5) {
+      return <Podcast />;
+    } else {
+      return <Typography variant="h6">No output format selected</Typography>;
+    }
+  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -70,7 +82,9 @@ const ContentRepurposingPage = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={4}></Grid>
+      <Grid container spacing={4}>
+        {renderContent()}
+      </Grid>
 
       <style jsx>{`
         .spinning {

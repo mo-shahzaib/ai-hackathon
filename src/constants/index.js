@@ -23,4 +23,5 @@ export const outputFormats = [
   { id: 2, name: "Regional Languages" },
   { id: 3, name: "Interactive Quiz" },
   { id: 4, name: "Flashcards" },
+  { id: 5, name: "Podcast" },
 ];
