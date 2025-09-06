@@ -287,3 +287,8 @@ export const getFlashcards = async (id) => {
   const response = await axiosInstance.get(`/flashcard/${id}`);
   return response;
 };
+
+export const getQuiz = async (id) => {
+  const response = await axiosInstance.get(`/quiz/${id}`);
+  return response;
+};

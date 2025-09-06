@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Container,
   Typography,
@@ -32,6 +32,9 @@ import {
   SkipNext,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useSearchParams } from "react-router";
+import { getQuiz } from "../services/aiService";
+import QuizSkeleton from "./QuizSkeleton";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
@@ -91,84 +94,97 @@ const ActionButton = styled(Button)(() => ({
   transition: "all 0.3s ease",
 }));
 
-const InteractiveQuiz = ({ quizData, onQuizComplete }) => {
-  // Dummy quiz data
-  const defaultQuizData = {
-    title: "Business Communication Fundamentals Quiz",
-    description:
-      "Test your knowledge of essential business communication concepts",
-    timeLimit: 600,
-    passingScore: 70,
-    questions: [
-      {
-        id: 1,
-        question:
-          "What percentage of communication effectiveness comes from body language?",
-        options: ["25%", "35%", "55%", "75%"],
-        correctAnswer: 2,
-        explanation:
-          "Research shows that 55% of communication effectiveness comes from body language and non-verbal cues.",
-      },
-      {
-        id: 2,
-        question:
-          "Which of the following is NOT a key principle of effective business writing?",
-        options: [
-          "Clarity and conciseness",
-          "Using complex vocabulary to sound professional",
-          "Audience-focused content",
-          "Proper structure and organization",
-        ],
-        correctAnswer: 1,
-        explanation:
-          "Effective business writing should use clear, simple language rather than complex vocabulary.",
-      },
-      {
-        id: 3,
-        question:
-          "What is the primary purpose of active listening in business communication?",
-        options: [
-          "To prepare your counter-arguments",
-          "To understand the speaker's message completely",
-          "To demonstrate your expertise",
-          "To identify flaws in the speaker's logic",
-        ],
-        correctAnswer: 1,
-        explanation:
-          "Active listening focuses on fully understanding the speaker's message, emotions, and intentions.",
-      },
-      {
-        id: 4,
-        question:
-          "In email communication, what should be the maximum recommended length of a subject line?",
-        options: [
-          "5-10 words",
-          "15-20 words",
-          "25-30 words",
-          "No limit needed",
-        ],
-        correctAnswer: 0,
-        explanation:
-          "Email subject lines should be concise (5-10 words) to ensure they display fully on mobile devices.",
-      },
-      {
-        id: 5,
-        question:
-          "Which communication model best represents modern digital business communication?",
-        options: [
-          "Linear model",
-          "Interactive model",
-          "Transactional model",
-          "Shannon-Weaver model",
-        ],
-        correctAnswer: 2,
-        explanation:
-          "The transactional model recognizes that communication is simultaneous, contextual, and influenced by multiple factors.",
-      },
-    ],
-  };
+// Dummy quiz data
+const defaultQuizData = {
+  title: "Business Communication Fundamentals Quiz",
+  description:
+    "Test your knowledge of essential business communication concepts",
+  timeLimit: 600,
+  passingScore: 70,
+  questions: [
+    {
+      id: 1,
+      question:
+        "What percentage of communication effectiveness comes from body language?",
+      options: ["25%", "35%", "55%", "75%"],
+      correctAnswer: 2,
+      explanation:
+        "Research shows that 55% of communication effectiveness comes from body language and non-verbal cues.",
+    },
+    {
+      id: 2,
+      question:
+        "Which of the following is NOT a key principle of effective business writing?",
+      options: [
+        "Clarity and conciseness",
+        "Using complex vocabulary to sound professional",
+        "Audience-focused content",
+        "Proper structure and organization",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Effective business writing should use clear, simple language rather than complex vocabulary.",
+    },
+    {
+      id: 3,
+      question:
+        "What is the primary purpose of active listening in business communication?",
+      options: [
+        "To prepare your counter-arguments",
+        "To understand the speaker's message completely",
+        "To demonstrate your expertise",
+        "To identify flaws in the speaker's logic",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Active listening focuses on fully understanding the speaker's message, emotions, and intentions.",
+    },
+    {
+      id: 4,
+      question:
+        "In email communication, what should be the maximum recommended length of a subject line?",
+      options: ["5-10 words", "15-20 words", "25-30 words", "No limit needed"],
+      correctAnswer: 0,
+      explanation:
+        "Email subject lines should be concise (5-10 words) to ensure they display fully on mobile devices.",
+    },
+    {
+      id: 5,
+      question:
+        "Which communication model best represents modern digital business communication?",
+      options: [
+        "Linear model",
+        "Interactive model",
+        "Transactional model",
+        "Shannon-Weaver model",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "The transactional model recognizes that communication is simultaneous, contextual, and influenced by multiple factors.",
+    },
+  ],
+};
 
-  const quiz = quizData || defaultQuizData;
+const InteractiveQuiz = ({ onQuizComplete }) => {
+  const [searchParams] = useSearchParams();
+  const lectures = searchParams.get("lectures");
+  const caseStudies = searchParams.get("caseStudies");
+  const assignments = searchParams.get("assignments");
+  const [quiz, setQuiz] = useState(defaultQuizData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (lectures || caseStudies || assignments) {
+      setIsLoading(true);
+      getQuiz(lectures || caseStudies || assignments).then((res) => {
+        console.log("quiz", res.data);
+        setQuiz(res.data);
+        setIsLoading(false);
+      });
+    }
+  }, [lectures, caseStudies, assignments]);
+
+  //   const quiz = quizData || defaultQuizData;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -178,6 +194,38 @@ const InteractiveQuiz = ({ quizData, onQuizComplete }) => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   const [quizPaused, setQuizPaused] = useState(false);
+
+  const handleQuizSubmit = useCallback(() => {
+    let correctAnswers = 0;
+    quiz.questions.forEach((question) => {
+      if (selectedAnswers[question.id] === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+
+    const finalScore = Math.round(
+      (correctAnswers / quiz.questions.length) * 100
+    );
+    setScore(finalScore);
+    setShowResults(true);
+
+    if (onQuizComplete) {
+      onQuizComplete({
+        score: finalScore,
+        correctAnswers,
+        totalQuestions: quiz.questions.length,
+        timeTaken: quiz.timeLimit - timeLeft,
+        passed: finalScore >= quiz.passingScore,
+      });
+    }
+  }, [
+    quiz.questions,
+    quiz.timeLimit,
+    quiz.passingScore,
+    onQuizComplete,
+    selectedAnswers,
+    timeLeft,
+  ]);
 
   // Timer effect
   useEffect(() => {
@@ -193,7 +241,7 @@ const InteractiveQuiz = ({ quizData, onQuizComplete }) => {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [quizStarted, quizPaused, showResults, timeLeft]);
+  }, [quizStarted, quizPaused, showResults, timeLeft, handleQuizSubmit]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -224,31 +272,6 @@ const InteractiveQuiz = ({ quizData, onQuizComplete }) => {
     }
   };
 
-  const handleQuizSubmit = () => {
-    let correctAnswers = 0;
-    quiz.questions.forEach((question) => {
-      if (selectedAnswers[question.id] === question.correctAnswer) {
-        correctAnswers++;
-      }
-    });
-
-    const finalScore = Math.round(
-      (correctAnswers / quiz.questions.length) * 100
-    );
-    setScore(finalScore);
-    setShowResults(true);
-
-    if (onQuizComplete) {
-      onQuizComplete({
-        score: finalScore,
-        correctAnswers,
-        totalQuestions: quiz.questions.length,
-        timeTaken: quiz.timeLimit - timeLeft,
-        passed: finalScore >= quiz.passingScore,
-      });
-    }
-  };
-
   const handleQuizRestart = () => {
     setCurrentQuestion(0);
     setSelectedAnswers({});
@@ -274,6 +297,10 @@ const InteractiveQuiz = ({ quizData, onQuizComplete }) => {
 
   const currentQ = quiz.questions[currentQuestion];
   const progress = ((currentQuestion + 1) / quiz.questions.length) * 100;
+
+  if (isLoading) {
+    return <QuizSkeleton />;
+  }
 
   // Quiz Start Screen
   if (!quizStarted && !showResults) {
