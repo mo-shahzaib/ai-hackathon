@@ -37,6 +37,7 @@ const HomePage = () => {
       duration: "3 years",
       level: "Undergraduate",
       category: "Business",
+      ready: true,
     },
     {
       id: 2,
@@ -46,6 +47,7 @@ const HomePage = () => {
       duration: "3 years",
       level: "Undergraduate",
       category: "Technology",
+      ready: false,
     },
   ];
 
@@ -101,8 +103,21 @@ const HomePage = () => {
           }}
         >
           {programs.map((program) => (
-            <StyledCard key={program.id} sx={{ minWidth: 350, maxWidth: 350 }}>
-              <CardContent sx={{ flexGrow: 1, p: 3 }}>
+            <StyledCard
+              key={program.id}
+              sx={{
+                minWidth: 350,
+                maxWidth: 350,
+                opacity: program.ready ? 1 : 0.5,
+                cursor: program.ready ? "pointer" : "not-allowed",
+              }}
+            >
+              <CardContent
+                sx={{
+                  flexGrow: 1,
+                  p: 3,
+                }}
+              >
                 <Box
                   display="flex"
                   justifyContent="space-between"
@@ -146,6 +161,7 @@ const HomePage = () => {
 
               <CardActions sx={{ p: 3, pt: 0 }}>
                 <Button
+                  disabled={!program.ready}
                   variant="contained"
                   fullWidth
                   onClick={() =>
@@ -159,7 +175,7 @@ const HomePage = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  View Subjects
+                  {program.ready ? "View Subjects" : "Coming Soon"}
                 </Button>
               </CardActions>
             </StyledCard>

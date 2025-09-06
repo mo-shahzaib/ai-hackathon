@@ -80,11 +80,12 @@ const SubjectsPage = () => {
     BBA: [
       {
         id: 1,
-        name: "Business Management",
+        name: "Business Communication",
         code: "BM101",
         icon: <Business />,
         difficulty: "Beginner",
         credits: 4,
+        ready: true,
       },
       {
         id: 2,
@@ -93,6 +94,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: true,
       },
       {
         id: 3,
@@ -101,6 +103,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Intermediate",
         credits: 3,
+        ready: false,
       },
       {
         id: 4,
@@ -109,6 +112,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 5,
@@ -117,6 +121,7 @@ const SubjectsPage = () => {
         icon: <Calculate />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
       {
         id: 6,
@@ -125,6 +130,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
     ],
     BCA: [
@@ -135,6 +141,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Beginner",
         credits: 4,
+        ready: false,
       },
       {
         id: 8,
@@ -143,6 +150,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
       {
         id: 9,
@@ -151,6 +159,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
       {
         id: 10,
@@ -159,6 +168,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Intermediate",
         credits: 3,
+        ready: false,
       },
       {
         id: 11,
@@ -167,6 +177,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 12,
@@ -175,6 +186,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
     ],
     "B.Com": [
@@ -185,6 +197,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
       {
         id: 14,
@@ -193,6 +206,7 @@ const SubjectsPage = () => {
         icon: <Business />,
         difficulty: "Beginner",
         credits: 4,
+        ready: false,
       },
       {
         id: 15,
@@ -201,6 +215,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 16,
@@ -209,6 +224,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 17,
@@ -235,6 +251,7 @@ const SubjectsPage = () => {
         icon: <Business />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 20,
@@ -243,6 +260,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 21,
@@ -251,6 +269,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 22,
@@ -259,6 +278,7 @@ const SubjectsPage = () => {
         icon: <Calculate />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 23,
@@ -267,6 +287,7 @@ const SubjectsPage = () => {
         icon: <Business />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 24,
@@ -275,6 +296,7 @@ const SubjectsPage = () => {
         icon: <Science />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
     ],
     BA: [
@@ -285,6 +307,7 @@ const SubjectsPage = () => {
         icon: <Language />,
         difficulty: "Beginner",
         credits: 4,
+        ready: false,
       },
       {
         id: 26,
@@ -293,6 +316,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
       {
         id: 27,
@@ -301,6 +325,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Intermediate",
         credits: 3,
+        ready: false,
       },
       {
         id: 28,
@@ -309,6 +334,7 @@ const SubjectsPage = () => {
         icon: <Book />,
         difficulty: "Beginner",
         credits: 3,
+        ready: false,
       },
       {
         id: 29,
@@ -317,6 +343,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 30,
@@ -325,6 +352,7 @@ const SubjectsPage = () => {
         icon: <Psychology />,
         difficulty: "Intermediate",
         credits: 4,
+        ready: false,
       },
     ],
     MCA: [
@@ -335,6 +363,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 32,
@@ -343,6 +372,7 @@ const SubjectsPage = () => {
         icon: <Science />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 33,
@@ -351,6 +381,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
       {
         id: 34,
@@ -359,6 +390,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 35,
@@ -367,6 +399,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 3,
+        ready: false,
       },
       {
         id: 36,
@@ -375,6 +408,7 @@ const SubjectsPage = () => {
         icon: <Computer />,
         difficulty: "Advanced",
         credits: 4,
+        ready: false,
       },
     ],
   };
@@ -471,7 +505,13 @@ const SubjectsPage = () => {
       <Grid container spacing={3}>
         {subjects.map((subject) => (
           <Grid item xs={12} sm={6} md={4} key={subject.id}>
-            <StyledCard onClick={() => handleSubjectClick(subject)}>
+            <StyledCard
+              onClick={() => handleSubjectClick(subject)}
+              sx={{
+                opacity: subject.ready ? 1 : 0.5,
+                cursor: subject.ready ? "pointer" : "not-allowed",
+              }}
+            >
               <CardContent sx={{ p: 3 }}>
                 <Box
                   display="flex"
@@ -508,18 +548,14 @@ const SubjectsPage = () => {
                   alignItems="center"
                   mt={2}
                 >
-                  {/* <Chip
-                    label={`${subject.credits} Credits`}
-                    size="small"
-                    variant="outlined"
-                    color="primary"
-                  /> */}
                   <Typography
                     variant="body2"
                     color="primary"
                     sx={{ fontWeight: "medium" }}
                   >
-                    Click to Transform Content →
+                    {subject.ready
+                      ? "Click to Transform Content →"
+                      : "Coming Soon"}
                   </Typography>
                 </Box>
               </CardContent>
