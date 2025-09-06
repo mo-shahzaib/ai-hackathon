@@ -1,9 +1,3 @@
-// const ShortForm = () => {
-//   return <div>ShortForm</div>;
-// };
-
-// export default ShortForm;
-
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -17,15 +11,11 @@ import {
   Paper,
   Divider,
   Grid,
-  Tooltip,
   Collapse,
   Alert,
-  LinearProgress,
 } from "@mui/material";
 import {
   ContentCopy,
-  Download,
-  Share,
   Bookmark,
   BookmarkBorder,
   ExpandMore,
@@ -35,7 +25,6 @@ import {
   Lightbulb,
   CheckCircle,
   Language,
-  Refresh,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { getSummary } from "../services/aiService";
@@ -46,7 +35,6 @@ const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
   backdropFilter: "blur(10px)",
   border: `1px solid ${theme.palette.primary.main}20`,
-  //   borderRadius: theme.spacing(3),
   borderRadius: "0px 0px 12px 12px",
   position: "relative",
   overflow: "visible",
@@ -58,7 +46,6 @@ const GradientCard = styled(Card)(({ theme }) => ({
     right: 0,
     height: "4px",
     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    // borderRadius: "12px 12px 0 0",
   },
 }));
 
