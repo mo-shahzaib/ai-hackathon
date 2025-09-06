@@ -167,7 +167,16 @@ const DisclaimerPage = () => {
           />
         </Box>
 
-        <Button variant="contained" color="primary" component={Link} to="/home">
+        <Button
+          size="large"
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/home"
+          sx={{
+            background: "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
+          }}
+        >
           Get Started
         </Button>
       </Box>
