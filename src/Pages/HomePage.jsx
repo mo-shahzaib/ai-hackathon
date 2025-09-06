@@ -67,9 +67,9 @@ const HomePage = () => {
       {/* Header Section */}
       <Box textAlign="center" mb={6}>
         <Typography
-          variant="h2"
+          variant="h3"
           component="h1"
-          gutterBottom
+          // gutterBottom
           sx={{
             fontWeight: "bold",
             background: "linear-gradient(45deg, #667eea 30%, #764ba2 90%)",
@@ -77,13 +77,13 @@ const HomePage = () => {
             textFillColor: "transparent",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            mb: 2,
+            mb: "4px",
           }}
         >
           Programs
         </Typography>
         <Typography
-          variant="h5"
+          variant="body1"
           color="text.secondary"
           sx={{ mb: 4, maxWidth: 600, mx: "auto" }}
         >
@@ -100,6 +100,7 @@ const HomePage = () => {
             gap: 3,
             minWidth: "fit-content",
             flexWrap: "wrap",
+            justifyContent: "center",
           }}
         >
           {programs.map((program) => (

@@ -30,6 +30,7 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import FeaturesSection from "../components/FeaturesSection";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
@@ -175,11 +176,15 @@ const DisclaimerPage = () => {
           to="/home"
           sx={{
             background: "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
+            mt: 4,
+            fontSize: "18px",
           }}
         >
           Get Started
         </Button>
       </Box>
+
+      <FeaturesSection />
 
       {/* Main Disclaimer Card */}
       <GradientCard elevation={6} sx={{ mb: 4 }}>
