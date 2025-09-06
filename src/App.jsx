@@ -6,6 +6,7 @@ import HomePage from "./Pages/HomePage";
 import ContentRepurposingPage from "./Pages/ContentRepurposingPage";
 import DemoPage from "./Pages/DemoPage";
 import SubjectsPage from "./Pages/SubjectsPage";
+import Disclaimer from "./Pages/Disclaimer";
 // import ShortForm from "./Pages/shortForm";
 // import InteractiveQuiz from "./components/InteractiveQuiz";
 
@@ -38,7 +39,8 @@ function App() {
 
       {/* Routes */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Disclaimer />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/subjects" element={<SubjectsPage />} />
         <Route path="/demo" element={<DemoPage />} />
         {/* <Route path="/short-form" element={<ShortForm />} /> */}
