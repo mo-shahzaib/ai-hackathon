@@ -6,7 +6,8 @@ import HomePage from "./Pages/HomePage";
 import ContentRepurposingPage from "./Pages/ContentRepurposingPage";
 import DemoPage from "./Pages/DemoPage";
 import SubjectsPage from "./Pages/SubjectsPage";
-import ShortForm from "./Pages/shortForm";
+// import ShortForm from "./Pages/shortForm";
+// import InteractiveQuiz from "./components/InteractiveQuiz";
 
 function App() {
   return (
@@ -23,9 +24,12 @@ function App() {
           <Button color="inherit" component={Link} to="/demo">
             Demo
           </Button>
-          <Button color="inherit" component={Link} to="/short-form">
+          {/* <Button color="inherit" component={Link} to="/short-form">
             AI Summary
           </Button>
+          <Button color="inherit" component={Link} to="/quiz">
+            Quiz
+          </Button> */}
           {/* <Button color="inherit" component={Link} to="/content-repurposing">
             AI Repurposing
           </Button> */}
@@ -37,7 +41,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/subjects" element={<SubjectsPage />} />
         <Route path="/demo" element={<DemoPage />} />
-        <Route path="/short-form" element={<ShortForm />} />
+        {/* <Route path="/short-form" element={<ShortForm />} /> */}
+        {/* <Route path="/quiz" element={<InteractiveQuiz />} /> */}
         <Route
           path="/content-repurposing"
           element={<ContentRepurposingPage />}

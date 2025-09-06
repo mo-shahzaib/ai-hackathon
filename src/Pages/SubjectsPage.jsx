@@ -728,7 +728,7 @@ const SubjectsPage = () => {
                   fontSize: "1.1rem",
                 }}
               >
-                Start Genrating
+                Start Generating
               </Button>
 
               <Typography

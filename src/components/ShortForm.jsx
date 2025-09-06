@@ -457,10 +457,11 @@ ${displayContent.actionItems
           onClick={handleRegenerateContent}
           disabled={regenerating}
           sx={{
-            background: "linear-gradient(45deg, #FF6B6B 30%, #4ECDC4 90%)",
-            "&:hover": {
-              background: "linear-gradient(45deg, #FF6B6B 50%, #4ECDC4 100%)",
-            },
+            // background: "linear-gradient(45deg, #FF6B6B 30%, #4ECDC4 90%)",
+            // "&:hover": {
+            //   background: "linear-gradient(45deg, #FF6B6B 50%, #4ECDC4 100%)",
+            // },
+            background: "linear-gradient(45deg, #673AB7 30%, #3F51B5 90%)",
           }}
         >
           {regenerating ? "Regenerating..." : "Regenerate"}
