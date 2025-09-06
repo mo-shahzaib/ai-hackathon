@@ -39,23 +39,53 @@ const GradientCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const FlashCard = styled(Paper)(({ theme }) => ({
+const FlashCard = styled(Box)(() => ({
   height: "220px",
   cursor: "pointer",
   position: "relative",
+  perspective: "1000px",
+  "&:hover": {
+    "& .card-inner": {
+      transform: "rotateY(180deg)",
+    },
+  },
+}));
+
+const CardInner = styled(Box)(({ isflipped }) => ({
+  position: "relative",
+  width: "100%",
+  height: "100%",
+  textAlign: "center",
+  transition: "transform 0.6s",
+  transformStyle: "preserve-3d",
+  transform: isflipped ? "rotateY(180deg)" : "rotateY(0deg)",
+}));
+
+const CardFace = styled(Paper)(({ theme, isback }) => ({
+  position: "absolute",
+  width: "100%",
+  height: "100%",
+  backfaceVisibility: "hidden",
   borderRadius: "16px",
-  transition: "all 0.3s ease",
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}08 0%, ${theme.palette.secondary.main}08 100%)`,
-  border: `2px solid ${theme.palette.primary.main}20`,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   padding: theme.spacing(3),
+  border: `2px solid ${theme.palette.primary.main}20`,
+  transition: "all 0.3s ease",
+  ...(isback && {
+    transform: "rotateY(180deg)",
+    background: `linear-gradient(135deg, ${theme.palette.secondary.main}12 0%, ${theme.palette.primary.main}12 100%)`,
+    borderColor: theme.palette.secondary.main,
+  }),
+  ...(!isback && {
+    background: `linear-gradient(135deg, ${theme.palette.primary.main}08 0%, ${theme.palette.secondary.main}08 100%)`,
+  }),
   "&:hover": {
     boxShadow: theme.shadows[8],
-    transform: "translateY(-4px)",
-    borderColor: theme.palette.primary.main,
-    background: `linear-gradient(135deg, ${theme.palette.secondary.main}12 0%, ${theme.palette.primary.main}12 100%)`,
+    borderColor: isback
+      ? theme.palette.secondary.main
+      : theme.palette.primary.main,
   },
 }));
 
@@ -170,8 +200,8 @@ const Flashcards = ({ flashcardsData }) => {
               Study Mode
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-              Hover over any card to reveal the answer, or click to keep it
-              revealed
+              Hover over any card to flip and reveal the answer, or click to
+              keep it flipped
             </Typography>
             <Box
               display="flex"
@@ -190,110 +220,79 @@ const Flashcards = ({ flashcardsData }) => {
           <Grid container spacing={3}>
             {displayData.flashcards.map((card, index) => (
               <Grid item xs={12} key={index} width="30%">
-                <FlashCard
-                  onClick={() => handleCardClick(index)}
-                  elevation={4}
-                  onMouseEnter={(e) => {
-                    if (!flippedCards[index]) {
-                      e.currentTarget.setAttribute("data-hovered", "true");
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!flippedCards[index]) {
-                      e.currentTarget.removeAttribute("data-hovered");
-                    }
-                  }}
-                  sx={{
-                    '&[data-hovered="true"]': {
-                      "& .question-content": { display: "none" },
-                      "& .answer-content": { display: "block" },
-                    },
-                    ...(flippedCards[index] && {
-                      "& .question-content": { display: "none" },
-                      "& .answer-content": { display: "block" },
-                      borderColor: "secondary.main",
-                      background: `linear-gradient(135deg, rgba(156, 39, 176, 0.12) 0%, rgba(63, 81, 181, 0.12) 100%)`,
-                    }),
-                  }}
-                >
-                  <Box textAlign="center" sx={{ width: "100%" }}>
-                    {/* Question Content */}
-                    <Box
-                      className="question-content"
-                      sx={{
-                        transition: "opacity 0.3s ease",
-                        opacity: 1,
-                      }}
-                    >
-                      <Quiz
-                        sx={{
-                          fontSize: 40,
-                          color: "primary.main",
-                          mb: 2,
-                        }}
-                      />
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                          lineHeight: 1.3,
-                          color: "text.primary",
-                          mb: 2,
-                        }}
-                      >
-                        {card.question}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "text.secondary",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        Hover to reveal answer
-                      </Typography>
-                    </Box>
+                <FlashCard onClick={() => handleCardClick(index)}>
+                  <CardInner
+                    className="card-inner"
+                    isflipped={flippedCards[index] ? 1 : 0}
+                  >
+                    {/* Front Face - Question */}
+                    <CardFace isback={0} elevation={4}>
+                      <Box textAlign="center" sx={{ width: "100%" }}>
+                        <Quiz
+                          sx={{
+                            fontSize: 40,
+                            color: "primary.main",
+                            mb: 2,
+                          }}
+                        />
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: "bold",
+                            lineHeight: 1.3,
+                            color: "text.primary",
+                            mb: 2,
+                          }}
+                        >
+                          {card.question}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: "text.secondary",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          Hover or click to reveal answer
+                        </Typography>
+                      </Box>
+                    </CardFace>
 
-                    {/* Answer Content */}
-                    <Box
-                      className="answer-content"
-                      sx={{
-                        display: "none",
-                        transition: "opacity 0.3s ease",
-                        opacity: 1,
-                      }}
-                    >
-                      <Lightbulb
-                        sx={{
-                          fontSize: 40,
-                          color: "secondary.main",
-                          mb: 2,
-                        }}
-                      />
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontWeight: "medium",
-                          lineHeight: 1.4,
-                          color: "text.primary",
-                          mb: 1,
-                        }}
-                      >
-                        {card.answer}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "secondary.main",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        {flippedCards[index]
-                          ? "Click to show question"
-                          : "Answer revealed"}
-                      </Typography>
-                    </Box>
-                  </Box>
+                    {/* Back Face - Answer */}
+                    <CardFace isback={1} elevation={4}>
+                      <Box textAlign="center" sx={{ width: "100%" }}>
+                        <Lightbulb
+                          sx={{
+                            fontSize: 40,
+                            color: "secondary.main",
+                            mb: 2,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontWeight: "medium",
+                            lineHeight: 1.4,
+                            color: "text.primary",
+                            mb: 1,
+                          }}
+                        >
+                          {card.answer}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: "secondary.main",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          {flippedCards[index]
+                            ? "Click to show question"
+                            : "Answer revealed"}
+                        </Typography>
+                      </Box>
+                    </CardFace>
+                  </CardInner>
                 </FlashCard>
               </Grid>
             ))}
