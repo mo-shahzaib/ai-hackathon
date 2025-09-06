@@ -4,7 +4,7 @@
 
 // export default ShortForm;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -38,12 +38,16 @@ import {
   Refresh,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { getSummary } from "../services/aiService";
+import { useSearchParams } from "react-router";
+import SummarySkeleton from "./SummarySkeleton";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
   backdropFilter: "blur(10px)",
   border: `1px solid ${theme.palette.primary.main}20`,
-  borderRadius: theme.spacing(3),
+  //   borderRadius: theme.spacing(3),
+  borderRadius: "0px 0px 12px 12px",
   position: "relative",
   overflow: "visible",
   "&::before": {
@@ -54,7 +58,7 @@ const GradientCard = styled(Card)(({ theme }) => ({
     right: 0,
     height: "4px",
     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    borderRadius: "12px 12px 0 0",
+    // borderRadius: "12px 12px 0 0",
   },
 }));
 
@@ -83,11 +87,15 @@ const ActionButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const ShortForm = ({ content, metadata, onRegenerateContent }) => {
+const ShortForm = () => {
+  const [searchParams] = useSearchParams();
+  const lectures = searchParams.get("lectures");
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [expanded, setExpanded] = useState(true);
-  const [regenerating, setRegenerating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  //   const [regenerating, setRegenerating] = useState(false);
 
   // Sample AI-generated content structure
   const defaultContent = {
@@ -118,14 +126,15 @@ const ShortForm = ({ content, metadata, onRegenerateContent }) => {
     language: "English",
   };
 
-  const displayContent = content || defaultContent;
-  const displayMetadata = metadata || {
-    generatedAt: new Date().toLocaleString(),
-    aiModel: "Groq Llama-3",
-    processingTime: "2.3s",
-    subject: "Business Communication",
-    format: "Short-form Summary",
-  };
+  //   const displayContent = content || defaultContent;
+  const [displayContent, setDisplayContent] = useState(defaultContent);
+  //   const displayMetadata = {
+  //     generatedAt: new Date().toLocaleString(),
+  //     aiModel: "Groq Llama-3",
+  //     processingTime: "2.3s",
+  //     subject: "Business Communication",
+  //     format: "Short-form Summary",
+  //   };
 
   const handleCopyContent = () => {
     const textContent = `
@@ -152,38 +161,52 @@ ${displayContent.actionItems
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleRegenerateContent = () => {
-    setRegenerating(true);
-    if (onRegenerateContent) {
-      onRegenerateContent();
-    }
-    setTimeout(() => setRegenerating(false), 3000);
-  };
+  //   const handleRegenerateContent = () => {
+  //     setRegenerating(true);
+  //     if (onRegenerateContent) {
+  //       onRegenerateContent();
+  //     }
+  //     setTimeout(() => setRegenerating(false), 3000);
+  //   };
 
-  const handleShareContent = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: displayContent.title,
-        text: displayContent.summary,
-        url: window.location.href,
+  //   const handleShareContent = () => {
+  //     if (navigator.share) {
+  //       navigator.share({
+  //         title: displayContent.title,
+  //         text: displayContent.summary,
+  //         url: window.location.href,
+  //       });
+  //     }
+  //   };
+
+  //   const handleDownload = () => {
+  //     const element = document.createElement("a");
+  //     const file = new Blob([JSON.stringify(displayContent, null, 2)], {
+  //       type: "text/plain",
+  //     });
+  //     element.href = URL.createObjectURL(file);
+  //     element.download = `${displayContent.title.replace(
+  //       /\s+/g,
+  //       "_"
+  //     )}_summary.txt`;
+  //     document.body.appendChild(element);
+  //     element.click();
+  //     document.body.removeChild(element);
+  //   };
+
+  useEffect(() => {
+    if (lectures) {
+      setIsLoading(true);
+      getSummary(lectures).then((res) => {
+        setDisplayContent(res.data);
+        setIsLoading(false);
       });
     }
-  };
+  }, [lectures]);
 
-  const handleDownload = () => {
-    const element = document.createElement("a");
-    const file = new Blob([JSON.stringify(displayContent, null, 2)], {
-      type: "text/plain",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `${displayContent.title.replace(
-      /\s+/g,
-      "_"
-    )}_summary.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
+  if (isLoading) {
+    return <SummarySkeleton sx={{ mt: 2 }} />;
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -216,12 +239,12 @@ ${displayContent.actionItems
           gap={1}
           mb={3}
         >
-          <Chip
+          {/* <Chip
             icon={<AutoAwesome />}
             label={displayMetadata.aiModel}
             color="primary"
             variant="outlined"
-          />
+          /> */}
           <Chip
             icon={<Timer />}
             label={displayContent.readingTime}
@@ -266,7 +289,7 @@ ${displayContent.actionItems
                 color="text.secondary"
                 sx={{ fontSize: "1.1rem", lineHeight: 1.6 }}
               >
-                {displayContent.summary}
+                {displayContent.summaryEnglish}
               </Typography>
             </Box>
 
@@ -280,7 +303,7 @@ ${displayContent.actionItems
           </Box>
 
           {/* Progress Indicator */}
-          <Box mb={4}>
+          {/* <Box mb={4}>
             <Box
               display="flex"
               justifyContent="space-between"
@@ -311,7 +334,7 @@ ${displayContent.actionItems
                 },
               }}
             />
-          </Box>
+          </Box> */}
 
           <Divider sx={{ my: 3 }} />
 
@@ -431,25 +454,25 @@ ${displayContent.actionItems
           {copied ? "Copied!" : "Copy Content"}
         </ActionButton>
 
-        <ActionButton
+        {/* <ActionButton
           variant="outlined"
           startIcon={<Download />}
           onClick={handleDownload}
           color="primary"
         >
           Download
-        </ActionButton>
+        </ActionButton> */}
 
-        <ActionButton
+        {/* <ActionButton
           variant="outlined"
           startIcon={<Share />}
           onClick={handleShareContent}
           color="secondary"
         >
           Share
-        </ActionButton>
+        </ActionButton> */}
 
-        <ActionButton
+        {/* <ActionButton
           variant="contained"
           startIcon={
             regenerating ? <AutoAwesome className="spinning" /> : <Refresh />
@@ -465,7 +488,7 @@ ${displayContent.actionItems
           }}
         >
           {regenerating ? "Regenerating..." : "Regenerate"}
-        </ActionButton>
+        </ActionButton> */}
       </Box>
 
       {/* Success Alert */}
@@ -485,7 +508,7 @@ ${displayContent.actionItems
       )}
 
       {/* Regeneration Progress */}
-      {regenerating && (
+      {/* {regenerating && (
         <Alert
           severity="info"
           sx={{
@@ -503,10 +526,10 @@ ${displayContent.actionItems
             <LinearProgress sx={{ mt: 1 }} />
           </Box>
         </Alert>
-      )}
+      )} */}
 
       {/* Metadata Footer */}
-      <Paper
+      {/* <Paper
         sx={{
           mt: 4,
           p: 2,
@@ -520,7 +543,7 @@ ${displayContent.actionItems
           {displayMetadata.processingTime} • Subject: {displayMetadata.subject}{" "}
           • Format: {displayMetadata.format}
         </Typography>
-      </Paper>
+      </Paper> */}
 
       <style jsx>{`
         .spinning {

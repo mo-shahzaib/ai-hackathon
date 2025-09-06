@@ -7,12 +7,8 @@ export const formats = [
 
 // Sample lectures data
 export const lectures = [
-  { id: 1, name: "Introduction to Business Communication" },
-  { id: 2, name: "Written Communication Fundamentals" },
-  { id: 3, name: "Verbal Communication Skills" },
-  { id: 4, name: "Non-verbal Communication" },
-  { id: 5, name: "Digital Communication Tools" },
-  { id: 6, name: "Presentation Skills" },
+  { id: 11, name: "Introduction to Business Communication" },
+  { id: 12, name: "Written Communication Fundamentals" },
 ];
 
 // Sample case studies data
