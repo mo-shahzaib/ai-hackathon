@@ -81,6 +81,8 @@ const ActionButton = styled(Button)(({ theme }) => ({
 const ShortForm = () => {
   const [searchParams] = useSearchParams();
   const lectures = searchParams.get("lectures");
+  const caseStudies = searchParams.get("caseStudies");
+  const assignments = searchParams.get("assignments");
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [expanded, setExpanded] = useState(true);
@@ -188,14 +190,14 @@ ${displayContent?.["actionItems" + "_" + selectedLanguage]
   //   };
 
   useEffect(() => {
-    if (lectures) {
+    if (lectures || caseStudies || assignments) {
       setIsLoading(true);
-      getSummary(lectures).then((res) => {
+      getSummary(lectures || caseStudies || assignments).then((res) => {
         setDisplayContent(res.data);
         setIsLoading(false);
       });
     }
-  }, [lectures]);
+  }, [lectures, caseStudies, assignments]);
 
   if (isLoading) {
     return <SummarySkeleton sx={{ mt: 2 }} />;
