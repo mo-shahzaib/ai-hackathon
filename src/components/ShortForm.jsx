@@ -240,12 +240,12 @@ ${displayContent?.["actionItems" + "_" + selectedLanguage]
             color="primary"
             variant="outlined"
           /> */}
-          <Chip
+          {/* <Chip
             icon={<Timer />}
             label={displayContent?.["readingTime" + "_" + selectedLanguage]}
             color="secondary"
             variant="outlined"
-          />
+          /> */}
           {/* <Chip
             icon={<Language />}
             label={displayContent.language}
@@ -253,47 +253,59 @@ ${displayContent?.["actionItems" + "_" + selectedLanguage]
             variant="outlined"
           /> */}
 
-          <Chip
+          {/* <Chip
             label={displayContent?.["difficulty" + "_" + selectedLanguage]}
             color="warning"
             variant="outlined"
           />
 
           {/* Language Dropdown */}
-          <FormControl size="small" variant="outlined">
-            <Select
-              value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-              displayEmpty
-              startAdornment={<Language sx={{ mr: 1, color: "info.main" }} />}
-              sx={{
-                // minWidth: 120,
-                borderRadius: 20,
-                // height: 32,
-                backgroundColor: "rgba(33, 150, 243, 0.04)",
-                border: "1px solid rgba(33, 150, 243, 0.23)",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-                "&:hover": {
-                  backgroundColor: "rgba(33, 150, 243, 0.08)",
-                },
-                "& .MuiSelect-select": {
-                  paddingLeft: "6px",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                },
-              }}
-            >
-              {languageOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {/* <FormControl size="small" variant="outlined">
+                <Select
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                displayEmpty
+                startAdornment={<Language sx={{ mr: 1, color: "info.main" }} />}
+                sx={{
+                    // minWidth: 120,
+                    borderRadius: 20,
+                    // height: 32,
+                    backgroundColor: "rgba(33, 150, 243, 0.04)",
+                    border: "1px solid rgba(33, 150, 243, 0.23)",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                    },
+                    "&:hover": {
+                    backgroundColor: "rgba(33, 150, 243, 0.08)",
+                    },
+                    "& .MuiSelect-select": {
+                    paddingLeft: "6px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    fontSize: "0.875rem",
+                    fontWeight: 500,
+                    },
+                }}
+                >
+                {languageOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>  */}
+
+          {languageOptions.map((option) => (
+            <Chip
+              onClick={() => setSelectedLanguage(option.value)}
+              key={option.value}
+              label={option.label}
+              color="secondary"
+              variant={
+                option.value === selectedLanguage ? "filled" : "outlined"
+              }
+            />
+          ))}
         </Box>
       </Box>
 

@@ -239,8 +239,7 @@ const DisclaimerPage = () => {
               <Typography variant="body2">
                 <strong>Expected Issues:</strong> Due to free tier limitations,
                 you may encounter rate limiting, reduced functionality, or
-                temporary unavailability of certain features. This is expected
-                behavior for a hackathon demonstration project.
+                temporary unavailability of certain features.
               </Typography>
             </Alert>
           </Box>
@@ -359,14 +358,6 @@ const DisclaimerPage = () => {
           </Box>
         </CardContent>
       </GradientCard>
-
-      {/* Footer */}
-      <Box mt={4} textAlign="center">
-        <Typography variant="body2" color="text.secondary">
-          Built with ❤️ for the AI Hackathon • Using Free & Open Source
-          Technologies
-        </Typography>
-      </Box>
     </Container>
   );
 };
