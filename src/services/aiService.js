@@ -282,3 +282,8 @@ export const getPodcast = async (id) => {
   const response = await axiosInstance.get(`/podcast/${id}`);
   return response;
 };
+
+export const getFlashcards = async (id) => {
+  const response = await axiosInstance.get(`/flashcard/${id}`);
+  return response;
+};

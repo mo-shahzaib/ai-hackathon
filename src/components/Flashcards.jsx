@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -10,6 +10,9 @@ import {
   Paper,
   IconButton,
   Tooltip,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   Quiz,
@@ -17,8 +20,13 @@ import {
   AutoAwesome,
   Refresh,
   School,
+  Language,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useSearchParams } from "react-router";
+import { getFlashcards } from "../services/aiService";
+import { languageOptions } from "../constants";
+import FlashCardSkeleton from "./FlashCardSkeleton";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
@@ -89,13 +97,18 @@ const CardFace = styled(Paper)(({ theme, isback }) => ({
   },
 }));
 
-const Flashcards = ({ flashcardsData }) => {
+const Flashcards = () => {
   const [flippedCards, setFlippedCards] = useState({});
-
+  const [searchParams] = useSearchParams();
+  const lectures = searchParams.get("lectures");
+  const caseStudies = searchParams.get("caseStudies");
+  const assignments = searchParams.get("assignments");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [isLoading, setIsLoading] = useState(true);
   // Default data for demonstration
   const defaultData = {
-    source_file: "Introduction to Business Communication",
-    flashcards: [
+    source_file_en: "Introduction to Business Communication",
+    flashcards_en: [
       {
         question: "What is communication?",
         answer:
@@ -130,7 +143,7 @@ const Flashcards = ({ flashcardsData }) => {
     ],
   };
 
-  const displayData = flashcardsData || defaultData;
+  const [displayData, setDisplayData] = useState(defaultData);
 
   const handleCardClick = (index) => {
     setFlippedCards((prev) => ({
@@ -138,6 +151,20 @@ const Flashcards = ({ flashcardsData }) => {
       [index]: !prev[index],
     }));
   };
+
+  useEffect(() => {
+    if (lectures || caseStudies || assignments) {
+      setIsLoading(true);
+      getFlashcards(lectures || caseStudies || assignments).then((res) => {
+        setDisplayData(res.data);
+        setIsLoading(false);
+      });
+    }
+  }, [lectures, caseStudies, assignments]);
+
+  if (isLoading) {
+    return <FlashCardSkeleton />;
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -172,13 +199,15 @@ const Flashcards = ({ flashcardsData }) => {
         >
           <Chip
             icon={<School />}
-            label={displayData.source_file}
+            label={displayData?.["source_file" + "_" + selectedLanguage]}
             color="primary"
             variant="outlined"
           />
           <Chip
             icon={<Quiz />}
-            label={`${displayData.flashcards.length} Cards`}
+            label={`${
+              displayData?.["flashcards_" + selectedLanguage]?.length
+            } Cards`}
             color="secondary"
             variant="outlined"
           />
@@ -188,6 +217,41 @@ const Flashcards = ({ flashcardsData }) => {
             color="info"
             variant="outlined"
           />
+          {/* Language Dropdown */}
+          <FormControl size="small" variant="outlined">
+            <Select
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              displayEmpty
+              startAdornment={<Language sx={{ mr: 1, color: "info.main" }} />}
+              sx={{
+                // minWidth: 120,
+                borderRadius: 20,
+                // height: 32,
+                backgroundColor: "rgba(33, 150, 243, 0.04)",
+                border: "1px solid rgba(33, 150, 243, 0.23)",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&:hover": {
+                  backgroundColor: "rgba(33, 150, 243, 0.08)",
+                },
+                "& .MuiSelect-select": {
+                  paddingLeft: "6px",
+                  paddingTop: "5px",
+                  paddingBottom: "5px",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                },
+              }}
+            >
+              {languageOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
       </Box>
 
@@ -218,84 +282,100 @@ const Flashcards = ({ flashcardsData }) => {
 
           {/* Flashcards Grid */}
           <Grid container spacing={3}>
-            {displayData.flashcards.map((card, index) => (
-              <Grid item xs={12} key={index} width="30%">
-                <FlashCard onClick={() => handleCardClick(index)}>
-                  <CardInner
-                    className="card-inner"
-                    isflipped={flippedCards[index] ? 1 : 0}
-                  >
-                    {/* Front Face - Question */}
-                    <CardFace isback={0} elevation={4}>
-                      <Box textAlign="center" sx={{ width: "100%" }}>
-                        <Quiz
-                          sx={{
-                            fontSize: 40,
-                            color: "primary.main",
-                            mb: 2,
-                          }}
-                        />
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            lineHeight: 1.3,
-                            color: "text.primary",
-                            mb: 2,
-                          }}
+            {displayData?.["flashcards_" + selectedLanguage]?.map(
+              (card, index) => (
+                <Grid item xs={12} key={index} width="30%">
+                  <FlashCard onClick={() => handleCardClick(index)}>
+                    <CardInner
+                      className="card-inner"
+                      isflipped={flippedCards[index] ? 1 : 0}
+                    >
+                      {/* Front Face - Question */}
+                      <CardFace
+                        isback={0}
+                        elevation={4}
+                        sx={{ overflow: "auto" }}
+                      >
+                        <Box
+                          textAlign="center"
+                          sx={{ width: "100%", height: "100%" }}
                         >
-                          {card.question}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "text.secondary",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          Hover or click to reveal answer
-                        </Typography>
-                      </Box>
-                    </CardFace>
+                          <Quiz
+                            sx={{
+                              fontSize: 40,
+                              color: "primary.main",
+                              mb: 2,
+                            }}
+                          />
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: "bold",
+                              lineHeight: 1.3,
+                              color: "text.primary",
+                              mb: 2,
+                            }}
+                          >
+                            {card.question}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: "text.secondary",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            Hover or click to reveal answer
+                          </Typography>
+                        </Box>
+                      </CardFace>
 
-                    {/* Back Face - Answer */}
-                    <CardFace isback={1} elevation={4}>
-                      <Box textAlign="center" sx={{ width: "100%" }}>
-                        <Lightbulb
-                          sx={{
-                            fontSize: 40,
-                            color: "secondary.main",
-                            mb: 2,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            fontWeight: "medium",
-                            lineHeight: 1.4,
-                            color: "text.primary",
-                            mb: 1,
-                          }}
+                      {/* Back Face - Answer */}
+                      <CardFace
+                        isback={1}
+                        elevation={4}
+                        sx={{ overflow: "auto" }}
+                      >
+                        <Box
+                          textAlign="center"
+                          sx={{ width: "100%", height: "100%" }}
                         >
-                          {card.answer}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "secondary.main",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          {flippedCards[index]
-                            ? "Click to show question"
-                            : "Answer revealed"}
-                        </Typography>
-                      </Box>
-                    </CardFace>
-                  </CardInner>
-                </FlashCard>
-              </Grid>
-            ))}
+                          <Lightbulb
+                            sx={{
+                              fontSize: 40,
+                              color: "secondary.main",
+                              mb: 2,
+                            }}
+                          />
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: "medium",
+                              lineHeight: 1.4,
+                              color: "text.primary",
+                              mb: 1,
+                            }}
+                          >
+                            {card.answer}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: "secondary.main",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {flippedCards[index]
+                              ? "Click to show question"
+                              : "Answer revealed"}
+                          </Typography>
+                        </Box>
+                      </CardFace>
+                    </CardInner>
+                  </FlashCard>
+                </Grid>
+              )
+            )}
           </Grid>
 
           {/* Study Tips */}
@@ -351,7 +431,7 @@ const Flashcards = ({ flashcardsData }) => {
                 color="secondary.main"
                 sx={{ fontWeight: "bold" }}
               >
-                {displayData.flashcards.length}
+                {displayData?.["flashcards_" + selectedLanguage]?.length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Total Cards
@@ -366,7 +446,7 @@ const Flashcards = ({ flashcardsData }) => {
                 {Math.round(
                   (Object.keys(flippedCards).filter((key) => flippedCards[key])
                     .length /
-                    displayData.flashcards.length) *
+                    displayData?.["flashcards_" + selectedLanguage]?.length) *
                     100
                 )}
                 %

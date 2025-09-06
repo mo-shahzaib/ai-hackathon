@@ -125,6 +125,8 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 const Podcast = ({ onLoadingComplete }) => {
   const [searchParams] = useSearchParams();
   const lectures = searchParams.get("lectures");
+  const caseStudies = searchParams.get("caseStudies");
+  const assignments = searchParams.get("assignments");
   const defaultPodcastData = {
     title: "Business Communication Fundamentals - AI Generated Podcast",
     description:
@@ -253,13 +255,13 @@ const Podcast = ({ onLoadingComplete }) => {
   //   const currentChapter = getCurrentChapter();
 
   useEffect(() => {
-    if (lectures) {
-      getPodcast(lectures).then((res) => {
+    if (lectures || caseStudies || assignments) {
+      getPodcast(lectures || caseStudies || assignments).then((res) => {
         setPodcast({
           //   audioUrl: res.data.podcast_en,
-          audioUrl:
-            res.data.podcast_en ||
-            "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+          audioUrl: res.data.podcast_en?.includes("wav")
+            ? res.data.podcast_en
+            : "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
           title: res.data.title || "Test",
           description: res.data.description || "Test",
           duration: res.data.duration || 1245,
@@ -267,7 +269,7 @@ const Podcast = ({ onLoadingComplete }) => {
         });
       });
     }
-  }, [lectures]);
+  }, [lectures, caseStudies, assignments]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -312,12 +314,12 @@ const Podcast = ({ onLoadingComplete }) => {
             color="secondary"
             variant="outlined"
           />
-          <Chip
+          {/* <Chip
             icon={<Language />}
             label={podcast.language}
             color="info"
             variant="outlined"
-          />
+          /> */}
           <Chip
             icon={<Headphones />}
             label={podcast.category}
