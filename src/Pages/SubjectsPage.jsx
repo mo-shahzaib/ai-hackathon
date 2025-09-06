@@ -94,7 +94,7 @@ const SubjectsPage = () => {
         icon: <AccountBalance />,
         difficulty: "Intermediate",
         credits: 4,
-        ready: true,
+        ready: false,
       },
       {
         id: 3,
