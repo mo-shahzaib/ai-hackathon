@@ -13,6 +13,9 @@ import {
   Grid,
   Collapse,
   Alert,
+  Select,
+  FormControl,
+  MenuItem,
 } from "@mui/material";
 import {
   ContentCopy,
@@ -30,6 +33,7 @@ import { styled } from "@mui/material/styles";
 import { getSummary } from "../services/aiService";
 import { useSearchParams } from "react-router";
 import SummarySkeleton from "./SummarySkeleton";
+import { languageOptions } from "../constants";
 
 const GradientCard = styled(Card)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
@@ -81,7 +85,7 @@ const ShortForm = () => {
   const [bookmarked, setBookmarked] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
   //   const [regenerating, setRegenerating] = useState(false);
 
   // Sample AI-generated content structure
@@ -125,21 +129,23 @@ const ShortForm = () => {
 
   const handleCopyContent = () => {
     const textContent = `
-${displayContent.title}
+${displayContent?.["title" + "_" + selectedLanguage]}
 
-${displayContent.summary}
+${displayContent?.["summary" + "_" + selectedLanguage]}
 
 Key Points:
-${displayContent.keyPoints
-  .map((point, index) => `${index + 1}. ${point}`)
+${displayContent?.["keyPoints" + "_" + selectedLanguage]
+  ?.map((point, index) => `${index + 1}. ${point}`)
   .join("\n")}
 
 Key Insights:
-${displayContent.insights.map((insight) => `• ${insight}`).join("\n")}
+${displayContent?.["insights" + "_" + selectedLanguage]
+  ?.map((insight) => `• ${insight}`)
+  .join("\n")}
 
 Action Items:
-${displayContent.actionItems
-  .map((item, index) => `${index + 1}. ${item}`)
+${displayContent?.["actionItems" + "_" + selectedLanguage]
+  ?.map((item, index) => `${index + 1}. ${item}`)
   .join("\n")}
     `;
 
@@ -234,21 +240,58 @@ ${displayContent.actionItems
           /> */}
           <Chip
             icon={<Timer />}
-            label={displayContent.readingTime}
+            label={displayContent?.["readingTime" + "_" + selectedLanguage]}
             color="secondary"
             variant="outlined"
           />
-          <Chip
+          {/* <Chip
             icon={<Language />}
             label={displayContent.language}
             color="info"
             variant="outlined"
-          />
+          /> */}
+
           <Chip
-            label={displayContent.difficulty}
+            label={displayContent?.["difficulty" + "_" + selectedLanguage]}
             color="warning"
             variant="outlined"
           />
+
+          {/* Language Dropdown */}
+          <FormControl size="small" variant="outlined">
+            <Select
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              displayEmpty
+              startAdornment={<Language sx={{ mr: 1, color: "info.main" }} />}
+              sx={{
+                // minWidth: 120,
+                borderRadius: 20,
+                // height: 32,
+                backgroundColor: "rgba(33, 150, 243, 0.04)",
+                border: "1px solid rgba(33, 150, 243, 0.23)",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&:hover": {
+                  backgroundColor: "rgba(33, 150, 243, 0.08)",
+                },
+                "& .MuiSelect-select": {
+                  paddingLeft: "6px",
+                  paddingTop: "5px",
+                  paddingBottom: "5px",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                },
+              }}
+            >
+              {languageOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
       </Box>
 
@@ -269,14 +312,19 @@ ${displayContent.actionItems
                 gutterBottom
                 sx={{ fontWeight: "bold" }}
               >
-                {displayContent.title}
+                {displayContent?.["title" + "_" + selectedLanguage]}
               </Typography>
               <Typography
                 variant="body1"
                 color="text.secondary"
                 sx={{ fontSize: "1.1rem", lineHeight: 1.6 }}
               >
-                {displayContent.summaryEnglish}
+                {/* {selectedLanguage === "English"
+                  ? displayContent.summaryEnglish
+                  : selectedLanguage === "Hindi"
+                  ? displayContent.summaryHindi
+                  : displayContent.summaryMarathi} */}
+                {displayContent?.["summary" + "_" + selectedLanguage]}
               </Typography>
             </Box>
 
@@ -347,7 +395,9 @@ ${displayContent.actionItems
                       </Typography>
                     </Box>
                     <Box component="ul" sx={{ pl: 2, m: 0 }}>
-                      {displayContent.keyPoints.map((point, index) => (
+                      {displayContent?.[
+                        "keyPoints" + "_" + selectedLanguage
+                      ]?.map((point, index) => (
                         <Typography
                           key={index}
                           component="li"
@@ -371,7 +421,9 @@ ${displayContent.actionItems
                       </Typography>
                     </Box>
                     <Box component="ul" sx={{ pl: 2, m: 0 }}>
-                      {displayContent.insights.map((insight, index) => (
+                      {displayContent?.[
+                        "insights" + "_" + selectedLanguage
+                      ]?.map((insight, index) => (
                         <Typography
                           key={index}
                           component="li"
@@ -395,7 +447,9 @@ ${displayContent.actionItems
                       </Typography>
                     </Box>
                     <Grid container spacing={2}>
-                      {displayContent.actionItems.map((item, index) => (
+                      {displayContent?.[
+                        "actionItems" + "_" + selectedLanguage
+                      ]?.map((item, index) => (
                         <Grid item xs={12} sm={6} key={index}>
                           <Paper
                             sx={{
