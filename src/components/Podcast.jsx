@@ -262,7 +262,7 @@ const Podcast = ({ onLoadingComplete }) => {
             //   audioUrl: res.data.podcast_en,
             audioUrl: res.data.podcast_en?.includes("wav")
               ? res.data.podcast_en
-              : "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+              : "https://ia601006.us.archive.org/22/items/accounting-lec-2/Accounting_Lec2.wav",
             title: res.data.title || "Podcast",
             description:
               res.data.description ||
@@ -278,7 +278,7 @@ const Podcast = ({ onLoadingComplete }) => {
           setPodcast({
             //   audioUrl: res.data.podcast_en,
             audioUrl:
-              "https://ueducation-my.sharepoint.com/:u:/r/personal/nicola_mascarenhas_upgrad_com/Documents/BBA_Course2_Financial_Accounting/Lecture2_/Accounting_Lec2.wav",
+              "https://ia601006.us.archive.org/22/items/accounting-lec-2/Accounting_Lec2.wav",
             title: "Podcast",
             description:
               "A brief description of a topic covered in the podcast",
